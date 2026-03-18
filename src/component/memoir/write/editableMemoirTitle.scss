@@ -1,0 +1,29 @@
+@use "/src/styles/styles" as *;
+@use "/src/styles/function" as *;
+
+.title-container {
+  display: flex;
+  flex-direction: column;
+  height: rem(60px);
+  position: relative;
+
+  .title-content {
+    border: none;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+  }
+
+  img {
+    width: rem(30px);
+    height: rem(30px);
+  }
+
+  .btn-container {
+    position: absolute;
+    display: flex;
+    top: rem(12px);
+    right: rem(10px);
+    gap: rem(5px);
+  }
+}

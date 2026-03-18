@@ -1,19 +1,19 @@
-import "./subMemoirTitle.scss";
-import { useMainTitleItemStore } from "../common/useMainTitleItemStore";
 import { useState } from "react";
+import "./editableMemoirTitle.scss";
 
-type SubMemoirTitleProps = {
-    mainTitleId: number;
-    id: number;
+type EditableMemoirTitleProps = {
     editable: boolean;
+    title: string;
+    mode: "VIEW" | "EDIT";
+    deleteTitleItem: () => void;
+    updateTitleMode: () => void;
+    updateTitle: (newTitle: string) => void;
 };
 
-const SubMemoirTitle = (props: SubMemoirTitleProps) => {
-    const { mainTitleId, id, editable } = props;
-    const { title, mode } = useMainTitleItemStore((state) => state.mainTitleItems[mainTitleId].subMemoirTitles[id]);
-    const { deleteSubTitleItem, updateSubTitleMode, updateSubTitle } = useMainTitleItemStore();
+const EditableMemoirTitle = (props: EditableMemoirTitleProps) => {
+    const { editable, title, mode, deleteTitleItem, updateTitleMode, updateTitle } = props;
     const [btnShow, setBtnShow] = useState(false);
-    const [titleState, setTitleState] = useState(title);
+    const [titleState, setTitleState] = useState<string>(title);
 
     const handleMoreBtn = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -22,12 +22,12 @@ const SubMemoirTitle = (props: SubMemoirTitleProps) => {
 
     const handleDeleteBtn = () => {
         if (confirm("정말로 삭제하시겠습니까?")) {
-            deleteSubTitleItem(mainTitleId, id);
+            deleteTitleItem();
         }
     };
 
-    const handleEditbtn = () => {
-        updateSubTitleMode(mainTitleId, id);
+    const handleEditBtn = () => {
+        updateTitleMode();
     };
 
     const handleOnChage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,15 +36,14 @@ const SubMemoirTitle = (props: SubMemoirTitleProps) => {
 
     const handlePressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
-            updateSubTitle(mainTitleId, id, e.currentTarget.value);
-            updateSubTitleMode(mainTitleId, id);
+            updateTitle(e.currentTarget.value);
+            updateTitleMode();
         }
     };
-
     return (
-        <div className={"sub-title"}>
+        <div className={"title-container"}>
             <input
-                className={"sub-title-content"}
+                className={"title-content"}
                 value={titleState}
                 disabled={mode === "VIEW"}
                 onChange={handleOnChage}
@@ -53,7 +52,7 @@ const SubMemoirTitle = (props: SubMemoirTitleProps) => {
             {editable && (
                 <div className={"btn-container"}>
                     {btnShow && <img src="/images/delete.svg" className={"delete-img"} onClick={handleDeleteBtn} />}
-                    {btnShow && <img src="/images/edit.svg" className={"edit-img"} onClick={handleEditbtn} />}
+                    {btnShow && <img src="/images/edit.svg" className={"edit-img"} onClick={handleEditBtn} />}
                     <img src="/images/more.svg" className={"more-img"} onClick={handleMoreBtn} />
                 </div>
             )}
@@ -61,4 +60,4 @@ const SubMemoirTitle = (props: SubMemoirTitleProps) => {
     );
 };
 
-export default SubMemoirTitle;
+export default EditableMemoirTitle;
